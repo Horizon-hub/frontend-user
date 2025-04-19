@@ -55,7 +55,7 @@ const SearchComp = ({ page ,setResults}) => {
             onChange={(e) => setLocation(e.target.value)}
             >
                 <option value="" disabled>Select Location</option>
-                <option values="damascus">Damascus</option>
+                <option value="damascus">Damascus</option>
                 <option value="halab">Halab</option>
                 <option value="homes">Homs</option>
                 <option value="latakia">Latakia</option>
