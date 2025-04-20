@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { hotels } from "../utils/hotels";
-import { getLocations } from "../api";
+import { getLocations ,getRooms} from "../api";
+
 const SearchComp = ({ page ,setResults}) => {
     const navigate = useNavigate();
     const locationHook = useLocation();
@@ -57,8 +57,9 @@ const SearchComp = ({ page ,setResults}) => {
         
         }
     };
-    const loadResults=(location)=>{
-        setResults(hotels.filter((hotel) => hotel.location === location));
+    const loadResults=async(location)=>{
+        const rooms = await getRooms(location);
+        setResults(rooms);
     }
 
     return (
@@ -70,7 +71,7 @@ const SearchComp = ({ page ,setResults}) => {
                 
                 <option value="" disabled>Select Location</option>
                 {locationsOptions.map((location) => (
-                    <option key={location} value={location.name}>
+                    <option key={location} value={location.id}>
                         {location.name}
                     </option>
                 ))}
