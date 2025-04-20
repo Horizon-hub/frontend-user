@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { hotels } from "../utils/hotels";
+import { getLocations } from "../api";
 const SearchComp = ({ page ,setResults}) => {
     const navigate = useNavigate();
     const locationHook = useLocation();
+    const [locationsOptions, setLocationsOptions] = useState([]);
 
     const [location, setLocation] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -23,6 +25,17 @@ const SearchComp = ({ page ,setResults}) => {
             loadResults(redirected_location);
         }
     },[redirected_location])
+    useEffect(() => {
+        const fetchLocations = async () => {
+            try {
+                const locations = await getLocations();
+                setLocationsOptions(locations);
+            } catch (error) {
+                console.error("Error fetching locations:", error);
+            }
+        };
+        fetchLocations();
+    }, []);
 
     const handleSearch = () => {
         if (!location || !startDate || !endDate) {
@@ -54,11 +67,14 @@ const SearchComp = ({ page ,setResults}) => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             >
+                
                 <option value="" disabled>Select Location</option>
-                <option value="damascus">Damascus</option>
-                <option value="halab">Halab</option>
-                <option value="homes">Homs</option>
-                <option value="latakia">Latakia</option>
+                {locationsOptions.map((location) => (
+                    <option key={location} value={location.name}>
+                        {location.name}
+                    </option>
+                ))}
+                
             </select>
         
             <input
